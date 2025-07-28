@@ -113,6 +113,8 @@ This project was created to practice and showcase my Python programming and GUI 
 
 
 📌 **Future Improvements**
+
+
 Add persistent storage (JSON or SQLite)
 
 Add login authentication

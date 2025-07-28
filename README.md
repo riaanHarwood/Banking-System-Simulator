@@ -103,10 +103,13 @@ Basic file I/O (optional for storing data)
 
 + Improving usability through GUI design
 
+
   
 
 **Acknowledgments**
 This project was created to practice and showcase my Python programming and GUI development skills. Feedback and suggestions are welcome!
+
+
 
 
 📌 **Future Improvements**

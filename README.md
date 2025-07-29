@@ -45,20 +45,26 @@ This project applies fundamental OOP principles:
 ## 🗂️ Project Structure
 
 banking-system/
+
 │
 ├── main.py # Entry point for the app
+
 ├── backend/
+
 │ ├── bank.py # Bank class logic
 │ ├── account.py # Account base and subclasses
 │ ├── customer.py # Customer-related data
 │ └── transaction.py # Handles transaction records
 │
+
 ├── gui/
+
 │ ├── app.py # GUI control flow
 │ ├── screens.py # Tkinter frames/windows
 │ └── widgets.py # Custom reusable widgets
 │
 ├── README.md
+
 └── requirements.txt
 
 

@@ -1,6 +1,8 @@
+from database import initialize
 from gui.app import BankApp
 
 if __name__ == "__main__":
+    initialize()
     try:
         app = BankApp()
         app.run()

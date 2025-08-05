@@ -1,3 +1,4 @@
+import sqlite3
 import tkinter as tk
 from tkinter import messagebox
 from backend.bank import Bank
@@ -85,7 +86,42 @@ class BankApp:
         submit_btn.grid(row=len(labels), column=0, columnspan=2, pady=20)
 
     def show_login(self):
-        messagebox.showinfo("Login", "Login functionality coming soon!")
+        login_win = tk.Toplevel(self.root)
+        login_win.title("Customer Login")
+        login_win.geometry("350x250")
+        login_win.configure(bg="#f0f0f0")
+
+        tk.Label(login_win, text="Customer ID", bg="#f0f0f0").grid(row=0, column=0, padx=10, pady=10, sticky="w")
+        id_entry = tk.Entry(login_win, width=25)
+        id_entry.grid(row=0, column=1, padx=10, pady=10)
+
+        tk.Label(login_win, text="Email Address", bg="#f0f0f0").grid(row=1, column=0, padx=10, pady=10, sticky="w")
+        email_entry = tk.Entry(login_win, width=25)
+        email_entry.grid(row=1, column=1, padx=10, pady=10)
+
+        def authenticate():
+            customer_id = id_entry.get().strip()
+            email = email_entry.get().strip()
+
+            # Use database to validate
+            conn = sqlite3.connect("banking.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM customers WHERE customer_id=? AND email=?", (customer_id, email))
+            result = cursor.fetchone()
+            conn.close()
+
+            if result:
+                messagebox.showinfo("Login Successful", f"Welcome back, {result[1]}!")
+                login_win.destroy()
+                self.show_dashboard(result[0], result[1])  # Pass customer_id and name
+            else:
+                messagebox.showerror("Login Failed", "Invalid Customer ID or Email.")
+
+        login_btn = tk.Button(login_win, text="Login", command=authenticate, bg="#4CAF50", fg="white", padx=10, pady=5)
+        login_btn.grid(row=3, column=0, columnspan=2, pady=20)
+
+            
+
 
     def run(self):
         self.root.mainloop()

@@ -85,6 +85,31 @@ class BankApp:
         submit_btn = tk.Button(create_win, text="Create Account", command=submit_customer, bg="#4CAF50", fg="white", padx=10, pady=5)
         submit_btn.grid(row=len(labels), column=0, columnspan=2, pady=20)
 
+
+
+    def show_dashboard(self, customer_id, name):
+        # Clear the current window
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+        # Dashboard UI
+        tk.Label(self.root, text=f"Welcome, {name}!", font=("Arial", 16)).pack(pady=20)
+        tk.Label(self.root, text=f"Customer ID: {customer_id}", font=("Arial", 12)).pack(pady=5)
+
+        # Example buttons
+        tk.Button(self.root, text="Check Balance", command=lambda: print("Balance check")).pack(pady=10)
+        tk.Button(self.root, text="Deposit Money", command=lambda: print("Deposit")).pack(pady=10)
+        tk.Button(self.root, text="Withdraw Money", command=lambda: print("Withdraw")).pack(pady=10)
+        tk.Button(self.root, text="Transactin History", command=lambda: print("Transaction History")).pack(pady=10)
+        # Logout button
+        tk.Button(self.root, text="Logout", command=self.show_login_screen).pack(pady=20)
+
+    def show_login_screen(self):
+        # This function would rebuild the login screen UI
+        pass
+
+
+
     def show_login(self):
         login_win = tk.Toplevel(self.root)
         login_win.title("Customer Login")

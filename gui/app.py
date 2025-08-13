@@ -14,6 +14,10 @@ class BankApp:
         self.create_main_menu()
 
     def create_main_menu(self):
+        # Clear window in case we are returning from dashboard
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
         title = tk.Label(
             self.root, text="Banking System Simulator",
             font=("Helvetica", 18, "bold"),
@@ -35,14 +39,9 @@ class BankApp:
             "pady": 10
         }
 
-        self.create_btn = tk.Button(self.root, text="Create Account", command=self.show_create_account, **button_style)
-        self.create_btn.pack(pady=10)
-
-        self.login_btn = tk.Button(self.root, text="Login", command=self.show_login, **button_style)
-        self.login_btn.pack(pady=10)
-
-        self.exit_btn = tk.Button(self.root, text="Exit", command=self.root.quit, **button_style)
-        self.exit_btn.pack(pady=10)
+        tk.Button(self.root, text="Create Account", command=self.show_create_account, **button_style).pack(pady=10)
+        tk.Button(self.root, text="Login", command=self.show_login, **button_style).pack(pady=10)
+        tk.Button(self.root, text="Exit", command=self.root.quit, **button_style).pack(pady=10)
 
     def show_create_account(self):
         create_win = tk.Toplevel(self.root)
@@ -70,43 +69,44 @@ class BankApp:
             address = entries["Home Address"].get().strip()
             id_number = entries["Identification"].get().strip()
 
-            # Basic validation
             if not all([fname, lname, email, phone, address, id_number]):
                 messagebox.showerror("Error", "Please fill out all fields.")
                 return
 
             full_name = f"{fname} {lname}"
             customer_id = self.bank.create_customer(full_name, email, phone)
-
-            # Optionally store other fields like address and ID in a real app
             messagebox.showinfo("Success", f"Account created!\nCustomer ID: {customer_id}")
             create_win.destroy()
 
-        submit_btn = tk.Button(create_win, text="Create Account", command=submit_customer, bg="#4CAF50", fg="white", padx=10, pady=5)
-        submit_btn.grid(row=len(labels), column=0, columnspan=2, pady=20)
+        tk.Button(create_win, text="Create Account", command=submit_customer, bg="#4CAF50", fg="white", padx=10, pady=5).grid(row=len(labels), column=0, columnspan=2, pady=20)
 
 
 
     def show_dashboard(self, customer_id, name):
-        # Clear the current window
         for widget in self.root.winfo_children():
             widget.destroy()
 
-        # Dashboard UI
         tk.Label(self.root, text=f"Welcome, {name}!", font=("Arial", 16)).pack(pady=20)
         tk.Label(self.root, text=f"Customer ID: {customer_id}", font=("Arial", 12)).pack(pady=5)
 
-        # Example buttons
-        tk.Button(self.root, text="Check Balance", command=lambda: print("Balance check")).pack(pady=10)
-        tk.Button(self.root, text="Deposit Money", command=lambda: print("Deposit")).pack(pady=10)
-        tk.Button(self.root, text="Withdraw Money", command=lambda: print("Withdraw")).pack(pady=10)
-        tk.Button(self.root, text="Transactin History", command=lambda: print("Transaction History")).pack(pady=10)
-        # Logout button
-        tk.Button(self.root, text="Logout", command=self.show_login_screen).pack(pady=20)
+        tk.Button(self.root, text="Check Balance", command=self.view_balance).pack(pady=10)
+        tk.Button(self.root, text="Deposit Money", command=self.deposit).pack(pady=10)
+        tk.Button(self.root, text="Withdraw Money", command=self.withdraw).pack(pady=10)
+        tk.Button(self.root, text="Transaction History", command=self.withdraw).pack(pady=10)
+        tk.Button(self.root, text="Logout", command=self.create_main_menu).pack(pady=20)
 
-    def show_login_screen(self):
-        # This function would rebuild the login screen UI
-        pass
+    def view_balance(self):
+        messagebox.showinfo("Balance", f"Your current balance is: $1000.00")
+
+    def deposit(self):
+        messagebox.showinfo("Deposit", "Deposit screen coming soon...")
+
+    def withdraw(self):
+        messagebox.showinfo("Withdraw", "Withdraw screen coming soon...")
+
+    def transaction_history(self):
+        messagebox.showinfo("Transaction History", "Transaction screen coming soon...")
+
 
 
 
@@ -128,25 +128,20 @@ class BankApp:
             customer_id = id_entry.get().strip()
             email = email_entry.get().strip()
 
-            # Use database to validate
             conn = sqlite3.connect("banking.db")
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM customers WHERE customer_id=? AND email=?", (customer_id, email))
+            cursor.execute("SELECT customer_id, name FROM customers WHERE customer_id=? AND email=?", (customer_id, email))
             result = cursor.fetchone()
             conn.close()
 
             if result:
                 messagebox.showinfo("Login Successful", f"Welcome back, {result[1]}!")
                 login_win.destroy()
-                self.show_dashboard(result[0], result[1])  # Pass customer_id and name
+                self.show_dashboard(result[0], result[1])
             else:
                 messagebox.showerror("Login Failed", "Invalid Customer ID or Email.")
 
-        login_btn = tk.Button(login_win, text="Login", command=authenticate, bg="#4CAF50", fg="white", padx=10, pady=5)
-        login_btn.grid(row=3, column=0, columnspan=2, pady=20)
-
-            
-
+        tk.Button(login_win, text="Login", command=authenticate, bg="#4CAF50", fg="white", padx=10, pady=5).grid(row=3, column=0, columnspan=2, pady=20)
 
     def run(self):
         self.root.mainloop()

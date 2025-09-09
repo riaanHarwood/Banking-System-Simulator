@@ -81,7 +81,6 @@ class BankApp:
         tk.Button(create_win, text="Create Account", command=submit_customer, bg="#4CAF50", fg="white", padx=10, pady=5).grid(row=len(labels), column=0, columnspan=2, pady=20)
 
 
-
     def show_dashboard(self, customer_id, name):
         for widget in self.root.winfo_children():
             widget.destroy()
